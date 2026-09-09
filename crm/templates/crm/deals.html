@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card-box">
+
+    <div class="page-header">
+
+        <h2>Deals 💰</h2>
+
+        <a href="{% url 'add_deal' %}"
+           class="btn btn-primary">
+            + Add Deal
+        </a>
+
+    </div>
+
+    <table class="table table-hover">
+
+        <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Title</th>
+                <th>Amount</th>
+                <th>Stage</th>
+                <th>Expected Close</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for d in deals %}
+            <tr>
+
+                <td>{{ d.customer }}</td>
+
+                <td>
+                    <a href="{% url 'deal_detail' d.id %}" class="record-link">
+                        {{ d.title }}
+                    </a>
+                </td>
+
+                <td>SAR {{ d.amount }}</td>
+
+                <td>
+                    {% if d.stage == "proposal" %}
+                        <span class="badge bg-secondary">Proposal</span>
+
+                    {% elif d.stage == "negotiation" %}
+                        <span class="badge bg-warning text-dark">Negotiation</span>
+
+                    {% elif d.stage == "won" %}
+                        <span class="badge bg-success">Won</span>
+
+                    {% elif d.stage == "lost" %}
+                        <span class="badge bg-danger">Lost</span>
+                    {% endif %}
+                </td>
+
+                <td>{{ d.expected_close_date }}</td>
+
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">
+                    No deals found
+                </td>
+            </tr>
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

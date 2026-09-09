@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="profile-page">
+
+    <div class="profile-header">
+        <div>
+            <h2>Edit Profile</h2>
+            <p>Update your personal account information</p>
+        </div>
+    </div>
+
+    <div class="edit-profile-card">
+
+        <div class="edit-profile-icon">
+            <i class="fa fa-user-edit"></i>
+        </div>
+
+        <div class="edit-profile-title">
+            <h3>Personal Information</h3>
+            <p>Update your name and email address</p>
+        </div>
+
+        <form method="post" class="edit-profile-form">
+
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="form-error">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div class="profile-form-grid">
+
+                <div class="form-group">
+                    <label for="{{ form.first_name.id_for_label }}">
+                        First Name
+                    </label>
+
+                    {{ form.first_name }}
+
+                    {% if form.first_name.errors %}
+                        <div class="field-error">
+                            {{ form.first_name.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.last_name.id_for_label }}">
+                        Last Name
+                    </label>
+
+                    {{ form.last_name }}
+
+                    {% if form.last_name.errors %}
+                        <div class="field-error">
+                            {{ form.last_name.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.email.id_for_label }}">
+                    Email Address
+                </label>
+
+                {{ form.email }}
+
+                {% if form.email.errors %}
+                    <div class="field-error">
+                        {{ form.email.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="readonly-profile-info">
+
+                <div class="readonly-item">
+                    <span>Username</span>
+                    <strong>{{ profile_user.username }}</strong>
+                </div>
+
+                <div class="readonly-item">
+                    <span>Role</span>
+
+                    {% if profile_user.groups.first %}
+                        <strong>
+                            {{ profile_user.groups.first.name }}
+                        </strong>
+                    {% else %}
+                        <strong>User</strong>
+                    {% endif %}
+                </div>
+
+            </div>
+
+            <div class="profile-actions">
+
+                <button type="submit" class="profile-btn">
+                    <i class="fa fa-save"></i>
+                    Save Changes
+                </button>
+
+                <a href="{% url 'profile' %}" class="profile-btn secondary-btn">
+                    <i class="fa fa-arrow-left"></i>
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

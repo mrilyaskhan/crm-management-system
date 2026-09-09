@@ -1,0 +1,288 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- ===================== -->
+<!-- DASHBOARD CARDS -->
+<!-- ===================== -->
+
+<div class="dashboard-grid">
+
+    <div class="dash-card blue">
+        <h3>{{ total_customers }}</h3>
+        <p>👥 Total Customers</p>
+    </div>
+
+    <div class="dash-card purple">
+        <h3>{{ total_leads }}</h3>
+        <p>📞 Total Leads</p>
+    </div>
+
+    <div class="dash-card green">
+        <h3>{{ total_revenue }}</h3>
+        <p>💰 Revenue (Won Deals)</p>
+    </div>
+
+    <div class="dash-card red">
+        <h3>{{ total_deals }}</h3>
+        <p>📦 Total Deals</p>
+    </div>
+
+    <div class="dash-card blue">
+        <h3>{{ won_deals }}</h3>
+        <p>🏆 Won Deals</p>
+    </div>
+
+    <div class="dash-card purple">
+        <h3>{{ lost_deals }}</h3>
+        <p>❌ Lost Deals</p>
+    </div>
+
+    <div class="dash-card green">
+        <h3>{{ open_deals }}</h3>
+        <p>⏳ Open Deals</p>
+    </div>
+
+    <div class="dash-card red">
+        <h3>{{ conversion_rate }}%</h3>
+        <p>📈 Conversion Rate</p>
+    </div>
+
+</div>
+
+
+<!-- ===================== -->
+<!-- ANALYTICS -->
+<!-- ===================== -->
+
+<div class="analytics-grid">
+
+    <!-- LEFT -->
+    <div class="chart-box">
+
+        <h3>Business Overview 📊</h3>
+
+        <canvas id="leadChart"></canvas>
+
+    </div>
+
+
+    <!-- RIGHT -->
+
+    <div class="insight-box">
+
+        <div class="insight-card blue">
+            <h4>{{ total_customers }}</h4>
+            <p>Customers</p>
+        </div>
+
+        <div class="insight-card purple">
+            <h4>{{ total_leads }}</h4>
+            <p>Leads</p>
+        </div>
+
+        <div class="insight-card green">
+            <h4>{{ total_revenue }}</h4>
+            <p>Total Revenue</p>
+        </div>
+
+        <div class="insight-card red">
+            <h4>{{ conversion_rate }}%</h4>
+            <p>Conversion Rate</p>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ===================== -->
+<!-- CHART -->
+<!-- ===================== -->
+<div class="recent-grid">
+
+    <div class="recent-card">
+
+        <h3>
+            <i class="fa fa-user-plus text-primary"></i>
+            Recent Leads
+        </h3>
+
+        <table class="table">
+
+            <thead>
+
+                <tr>
+                    <th>Name</th>
+                    <th>Status</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for lead in recent_leads %}
+
+                <tr>
+
+                    <td>{{ lead.name }}</td>
+
+                    <td>
+
+                        <span class="badge bg-primary">
+                            {{ lead.get_status_display }}
+                        </span>
+
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td colspan="2">
+                        No Leads
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+
+    <div class="recent-card">
+
+        <h3>
+            <i class="fa fa-handshake text-success"></i>
+            Recent Deals
+        </h3>
+
+        <table class="table">
+
+            <thead>
+
+                <tr>
+                    <th>Title</th>
+                    <th>Amount</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for deal in recent_deals %}
+
+                <tr>
+
+                    <td>{{ deal.title }}</td>
+
+                    <td>
+                        {{ deal.amount }}
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td colspan="2">
+                        No Deals
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+new Chart(document.getElementById('leadChart'), {
+
+    type: 'doughnut',
+
+    data: {
+
+        labels: [
+
+            'Customers',
+            'Leads',
+            'Deals',
+            'Won Deals',
+            'Lost Deals',
+            'Open Deals'
+
+        ],
+
+        datasets: [{
+
+            data: [
+
+                {{ total_customers }},
+                {{ total_leads }},
+                {{ total_deals }},
+                {{ won_deals }},
+                {{ lost_deals }},
+                {{ open_deals }}
+
+            ],
+
+            backgroundColor: [
+
+                '#3b82f6',
+                '#8b5cf6',
+                '#0ea5e9',
+                '#22c55e',
+                '#ef4444',
+                '#f59e0b'
+
+            ],
+
+            borderWidth: 0
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        cutout: '70%',
+
+        plugins: {
+
+            legend: {
+
+                position: 'bottom'
+
+            }
+
+        }
+
+    }
+
+});
+
+</script>
+
+{% endblock %}

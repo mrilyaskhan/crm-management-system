@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card-box">
+
+    <!-- HEADER -->
+    <div class="page-header">
+
+        <h2>💰 Deal Details</h2>
+
+        <div>
+            <a href="{% url 'deals' %}" class="btn btn-secondary">
+                <i class="fa fa-arrow-left"></i> Back
+            </a>
+
+            <a href="{% url 'edit_deal' deal.id %}" class="btn btn-warning">
+                <i class="fa fa-pen"></i> Edit
+            </a>
+        </div>
+
+    </div>
+
+    <!-- PROFILE CARD -->
+    <div class="profile-card">
+
+        <h3  class="deal-title">
+            <i class="fa fa-handshake"></i> {{ deal.title }}
+        </h3>
+
+        <div class="profile-grid">
+
+            <div class="profile-item">
+                <label class="crm-label blue">
+                    <i class="fa fa-building"></i> Customer
+                </label>
+                <p>{{ deal.customer }}</p>
+            </div>
+
+            <div class="profile-item">
+                <label class="crm-label green">
+                    <i class="fa fa-money-bill"></i> Amount
+                </label>
+                <p>SAR {{ deal.amount }}</p>
+            </div>
+
+            <div class="profile-item">
+
+                <label class="crm-label purple">
+                    <i class="fa fa-layer-group"></i> Stage
+                </label>
+
+                <p>
+                    {% if deal.stage == "proposal" %}
+                        <span class="badge bg-secondary">Proposal</span>
+
+                    {% elif deal.stage == "negotiation" %}
+                        <span class="badge bg-warning text-dark">Negotiation</span>
+
+                    {% elif deal.stage == "won" %}
+                        <span class="badge bg-success">Won</span>
+
+                    {% elif deal.stage == "lost" %}
+                        <span class="badge bg-danger">Lost</span>
+
+                    {% else %}
+                        <span class="badge bg-dark">
+                            {{ deal.stage|default:"Unknown" }}
+                        </span>
+                    {% endif %}
+                </p>
+
+            </div>
+
+            <div class="profile-item">
+               <label class="crm-label orange">
+                    <i class="fa fa-calendar"></i> Expected Close Date
+                </label>
+                <p>{{ deal.expected_close_date }}</p>
+            </div>
+
+            <div class="profile-item">
+                <label class="crm-label indigo">
+                    <i class="fa fa-user"></i> Created By
+                </label>
+
+                <p>
+                    <span class="badge bg-primary">
+                        {{ deal.created_by|default:"Admin" }}
+                    </span>
+                </p>
+            </div>
+
+            <div class="profile-item">
+                <label class="crm-label red">
+                    <i class="fa fa-clock"></i> Created At
+                </label>
+                <p>{{ deal.created_at|date:"d M Y, H:i" }}</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

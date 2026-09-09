@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="profile-page">
+
+    <div class="profile-header">
+        <div>
+            <h2>My Profile</h2>
+            <p>Manage your account information</p>
+        </div>
+    </div>
+
+    <div class="profile-card">
+
+        <div class="profile-avatar">
+            <i class="fa fa-user"></i>
+        </div>
+
+        <h3>
+            {{ profile_user.get_full_name|default:profile_user.username }}
+        </h3>
+
+        <p class="profile-username">
+            @{{ profile_user.username }}
+        </p>
+
+        <div class="profile-info">
+
+            <div class="profile-info-item">
+                <span>Username</span>
+                <strong>{{ profile_user.username }}</strong>
+            </div>
+
+            <div class="profile-info-item">
+                <span>Email</span>
+                <strong>
+                    {{ profile_user.email|default:"Not provided" }}
+                </strong>
+            </div>
+
+            <div class="profile-info-item">
+                <span>Role</span>
+                <strong>{{ role }}</strong>
+            </div>
+
+            <div class="profile-info-item">
+                <span>Joined</span>
+                <strong>
+                    {{ profile_user.date_joined|date:"d M Y" }}
+                </strong>
+            </div>
+
+        </div>
+
+        <div class="profile-actions">
+
+            <a href="{% url 'edit_profile' %}" class="profile-btn">
+                <i class="fa fa-user-edit"></i>
+                Edit Profile
+            </a>
+
+            <a href="{% url 'password_change' %}" class="profile-btn">
+                <i class="fa fa-lock"></i>
+                Change Password
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
