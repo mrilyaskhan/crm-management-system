@@ -2,48 +2,362 @@
 
 {% block content %}
 
-<div class="card-box">
+<div class="ksa-cust-page">
 
-    <div class="page-header">
-        <h2>Customers 👥</h2>
+    <!-- Page Header -->
+    <div class="ksa-cust-page-header">
 
-        <a href="{% url 'add_customer' %}" class="btn btn-success">
-            + Add Customer
+        <div></div>
+
+        <a
+            href="{% url 'add_customer' %}"
+            class="ksa-cust-add-top-btn"
+            title="Add Customer"
+        >
+            <i class="fa fa-plus"></i>
+            Add Customer
         </a>
+
+    </div>
+<!-- Customer Toolbar -->
+<div class="ksa-cust-toolbar">
+
+    <div class="ksa-cust-toolbar-title">
+
+        <h2>
+            <i class="fa fa-users"></i>
+            Customers
+        </h2>
+
     </div>
 
-    <table class="table table-hover mt-3">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Email</th>
-                <th>Company</th>
-                <th>Created</th>
-            </tr>
-        </thead>
 
-        <tbody>
-            {% for c in customers %}
-            <tr>
-               <td>
-                    <a href="{% url 'customer_detail' c.id %}" class="record-link">
-                        {{ c.name }}
-                    </a>
-                </td>
-                </td>
-                <td>{{ c.phone }}</td>
-                <td>{{ c.email }}</td>
-                <td>{{ c.company }}</td>
-                <td>{{ c.created_at }}</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="5">No customers yet</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <form method="GET" class="ksa-cust-toolbar-form">
+
+        <!-- Search -->
+        <div class="ksa-cust-toolbar-field ksa-cust-search-field">
+
+            <label for="ksa-cust-search">
+                Search
+            </label>
+
+            <div class="ksa-cust-search-wrap">
+
+                <i class="fa fa-search"></i>
+
+                <input
+                    type="text"
+                    id="ksa-cust-search"
+                    name="search"
+                    value="{{ search }}"
+                    placeholder="Name, phone, email, VAT or CR"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- Customer Type -->
+        <div class="ksa-cust-toolbar-field">
+
+            <label for="ksa-cust-type">
+                Type
+            </label>
+
+            <select
+                id="ksa-cust-type"
+                name="customer_type"
+            >
+
+                <option value="">
+                    All Types
+                </option>
+
+                <option
+                    value="B2B"
+                    {% if customer_type == 'B2B' %}
+                        selected
+                    {% endif %}
+                >
+                    B2B
+                </option>
+
+                <option
+                    value="B2C"
+                    {% if customer_type == 'B2C' %}
+                        selected
+                    {% endif %}
+                >
+                    B2C
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- City -->
+        <div class="ksa-cust-toolbar-field">
+
+            <label for="ksa-cust-city">
+                City
+            </label>
+
+            <input
+                type="text"
+                id="ksa-cust-city"
+                name="city"
+                value="{{ city }}"
+                placeholder="Jeddah"
+            >
+
+        </div>
+
+
+        <!-- Actions -->
+        <div class="ksa-cust-toolbar-actions">
+
+            <button
+                type="submit"
+                class="ksa-cust-search-btn"
+                title="Search Customers"
+            >
+                <i class="fa fa-search"></i>
+                <span>Search</span>
+            </button>
+
+            <a
+                href="{% url 'customers' %}"
+                class="ksa-cust-clear-btn"
+                title="Clear Filters"
+            >
+                <i class="fa fa-rotate-left"></i>
+                <span>Clear</span>
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<!-- ================================
+     CUSTOMER TABLE
+================================= -->
+
+<div class="ksa-cust-table-card">
+
+    <!-- Table Header -->
+    <div class="ksa-cust-table-header">
+
+        <div>
+            <h3>Customer Directory</h3>
+
+            <p>
+                {{ customers|length }}
+                customer{{ customers|length|pluralize }}
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- Table -->
+    <div class="ksa-cust-table-wrapper">
+
+        <table class="ksa-cust-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Customer
+                    </th>
+
+                    <th>
+                        Company
+                    </th>
+
+                    <th>
+                        Type
+                    </th>
+
+                    <th>
+                        Mobile
+                    </th>
+
+                    <th>
+                        VAT Number
+                    </th>
+
+                    <th>
+                        City
+                    </th>
+
+                    <th class="ksa-cust-action-head">
+                        Action
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for c in customers %}
+
+                <tr>
+
+                    <!-- Customer -->
+                    <td>
+
+                        <a
+                            href="{% url 'customer_detail' c.id %}"
+                            class="ksa-cust-name"
+                        >
+                            {{ c.name }}
+                        </a>
+
+                        {% if c.arabic_name %}
+
+                            <span class="ksa-cust-arabic">
+                                {{ c.arabic_name }}
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- Company -->
+                    <td>
+
+                        <span class="ksa-cust-company">
+                            {{ c.company|default:"—" }}
+                        </span>
+
+                    </td>
+
+
+                    <!-- Type -->
+                    <td>
+
+                        {% if c.customer_type == 'B2B' %}
+
+                            <span class="ksa-cust-type-badge ksa-cust-b2b">
+                                B2B
+                            </span>
+
+                        {% else %}
+
+                            <span class="ksa-cust-type-badge ksa-cust-b2c">
+                                B2C
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- Mobile -->
+                    <td>
+
+                        <span class="ksa-cust-phone">
+                            {{ c.phone|default:"—" }}
+                        </span>
+
+                    </td>
+
+
+                    <!-- VAT -->
+                    <td>
+
+                        <span class="ksa-cust-vat">
+                            {{ c.vat_number|default:"—" }}
+                        </span>
+
+                    </td>
+
+
+                    <!-- City -->
+                    <td>
+
+                        <span class="ksa-cust-city">
+                            {{ c.city|default:"—" }}
+                        </span>
+
+                    </td>
+
+
+                    <!-- Action -->
+                    <td class="ksa-cust-action-cell">
+
+                        <a
+                            href="{% url 'customer_detail' c.id %}"
+                            class="ksa-cust-view-btn"
+                            title="View Customer"
+                            aria-label="View Customer"
+                        >
+                            <i class="fa fa-eye"></i>
+                        </a>
+
+                    </td>
+
+                </tr>
+
+
+                {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                        class="ksa-cust-empty-cell"
+                    >
+
+                        <div class="ksa-cust-empty">
+
+                            <div class="ksa-cust-empty-icon">
+                                <i class="fa fa-users"></i>
+                            </div>
+
+                            <h4>
+                                No Customers Found
+                            </h4>
+
+                            <p>
+                                No customers match your current search or filter.
+                            </p>
+
+                            <a
+                                href="{% url 'add_customer' %}"
+                                class="ksa-cust-add-btn"
+                            >
+                                <i class="fa fa-plus"></i>
+                                Add Customer
+                            </a>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
 </div>
 
 {% endblock %}

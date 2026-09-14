@@ -7,13 +7,93 @@ class CustomerForm(forms.ModelForm):
 
     class Meta:
         model = Customer
+
         fields = [
             'name',
+            'arabic_name',
+            'customer_type',
+            'company',
             'phone',
             'email',
-            'company',
-            'address'
+            'vat_number',
+            'cr_number',
+            'city',
+            'district',
+            'address',
         ]
+
+        labels = {
+            'name': 'Customer Name',
+            'arabic_name': 'Arabic Name',
+            'customer_type': 'Customer Type',
+            'company': 'Company',
+            'phone': 'Mobile Number',
+            'email': 'Email Address',
+            'vat_number': 'VAT Number',
+            'cr_number': 'CR Number',
+            'city': 'City',
+            'district': 'District',
+            'address': 'Address',
+        }
+
+        widgets = {
+
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter customer name'
+            }),
+
+            'arabic_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'أدخل اسم العميل',
+                'dir': 'rtl'
+            }),
+
+            'customer_type': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+
+            'company': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter company name'
+            }),
+
+            'phone': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '+966 5XXXXXXXX'
+            }),
+
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'customer@example.com'
+            }),
+
+            'vat_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter VAT number'
+            }),
+
+            'cr_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter CR number'
+            }),
+
+            'city': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Jeddah'
+            }),
+
+            'district': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter district'
+            }),
+
+            'address': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter address',
+                'rows': 3
+            }),
+        }
 
 
 class LeadForm(forms.ModelForm):

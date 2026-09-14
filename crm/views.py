@@ -108,8 +108,51 @@ def dashboard(request):
 @login_required
 @user_passes_test(is_admin)
 def customers(request):
-    data = Customer.objects.all()
-    return render(request, 'crm/customers.html', {'customers': data})
+
+    search = request.GET.get('search', '').strip()
+    customer_type = request.GET.get('customer_type', '').strip()
+    city = request.GET.get('city', '').strip()
+
+    data = Customer.objects.all().order_by('-created_at')
+
+
+    # Search
+    if search:
+        data = data.filter(
+            Q(name__icontains=search) |
+            Q(arabic_name__icontains=search) |
+            Q(phone__icontains=search) |
+            Q(email__icontains=search) |
+            Q(company__icontains=search) |
+            Q(vat_number__icontains=search) |
+            Q(cr_number__icontains=search)
+        )
+
+
+    # Customer Type
+    if customer_type:
+        data = data.filter(
+            customer_type=customer_type
+        )
+
+
+    # City
+    if city:
+        data = data.filter(
+            city__icontains=city
+        )
+
+
+    return render(
+        request,
+        'crm/customers.html',
+        {
+            'customers': data,
+            'search': search,
+            'customer_type': customer_type,
+            'city': city,
+        }
+    )
 
 
 @login_required

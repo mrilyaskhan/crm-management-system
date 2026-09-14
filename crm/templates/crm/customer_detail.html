@@ -2,50 +2,246 @@
 
 {% block content %}
 
-<div class="card-box">
+<div class="customer-detail-page">
 
-    <div class="page-header">
-        <h2>Customer Profile 👤</h2>
+<!-- Header -->
+<div class="customer-detail-header">
 
-        <a href="{% url 'customers' %}" class="btn btn-secondary">
-            ← Back
-        </a>
+    <div>
+        <h2>
+            <i class="fa fa-user-circle"></i>
+            Customer Profile
+        </h2>
+
+        <p>Customer information and business details</p>
     </div>
 
-    <div class="profile-card">
+    <a href="{% url 'customers' %}" class="customer-back-btn">
+        <i class="fa fa-arrow-left"></i>
+        Back to Customers
+    </a>
 
-        <h3>{{ customer.name }}</h3>
+</div>
 
-        <div class="profile-grid">
 
-            <div class="profile-item">
-                <label>Phone</label>
-                <p>{{ customer.phone }}</p>
-            </div>
+<!-- Main Customer Card -->
+<div class="customer-detail-card">
 
-            <div class="profile-item">
-                <label>Email</label>
-                <p>{{ customer.email }}</p>
-            </div>
+    <!-- Customer Identity -->
+    <div class="customer-identity">
 
-            <div class="profile-item">
-                <label>Company</label>
-                <p>{{ customer.company }}</p>
-            </div>
+        <div class="customer-detail-avatar">
+            <i class="fa fa-user"></i>
+        </div>
 
-            <div class="profile-item">
-                <label>Address</label>
-                <p>{{ customer.address }}</p>
-            </div>
+        <div class="customer-identity-info">
 
-            <div class="profile-item">
-                <label>Created At</label>
-                <p>{{ customer.created_at }}</p>
+            <h3>
+                {{ customer.name }}
+            </h3>
+
+            {% if customer.arabic_name %}
+                <p class="customer-arabic-name">
+                    {{ customer.arabic_name }}
+                </p>
+            {% endif %}
+
+            <div class="customer-type-badge">
+
+                {% if customer.customer_type == 'B2B' %}
+                    <span class="customer-badge b2b-badge">
+                        <i class="fa fa-building"></i>
+                        B2B — Business
+                    </span>
+                {% else %}
+                    <span class="customer-badge b2c-badge">
+                        <i class="fa fa-user"></i>
+                        B2C — Individual
+                    </span>
+                {% endif %}
+
             </div>
 
         </div>
 
     </div>
+
+
+    <!-- Contact Information -->
+    <div class="customer-detail-section">
+
+        <div class="customer-detail-section-title">
+            <i class="fa fa-address-book"></i>
+            Contact Information
+        </div>
+
+        <div class="customer-detail-grid">
+
+            <div class="customer-detail-item">
+
+                <span>Mobile Number</span>
+
+                <strong>
+                    {{ customer.phone|default:"Not provided" }}
+                </strong>
+
+            </div>
+
+
+            <div class="customer-detail-item">
+
+                <span>Email Address</span>
+
+                <strong>
+                    {{ customer.email|default:"Not provided" }}
+                </strong>
+
+            </div>
+
+
+            <div class="customer-detail-item">
+
+                <span>Company</span>
+
+                <strong>
+                    {{ customer.company|default:"Not provided" }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Saudi Business Information -->
+    <div class="customer-detail-section">
+
+        <div class="customer-detail-section-title">
+            <i class="fa fa-building"></i>
+            Saudi Business Information
+        </div>
+
+        <div class="customer-detail-grid">
+
+            <div class="customer-detail-item">
+
+                <span>VAT Number</span>
+
+                <strong>
+                    {{ customer.vat_number|default:"Not provided" }}
+                </strong>
+
+            </div>
+
+
+            <div class="customer-detail-item">
+
+                <span>Commercial Registration (CR)</span>
+
+                <strong>
+                    {{ customer.cr_number|default:"Not provided" }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Location -->
+    <div class="customer-detail-section">
+
+        <div class="customer-detail-section-title">
+            <i class="fa fa-location-dot"></i>
+            Location
+        </div>
+
+        <div class="customer-detail-grid">
+
+            <div class="customer-detail-item">
+
+                <span>City</span>
+
+                <strong>
+                    {{ customer.city|default:"Not provided" }}
+                </strong>
+
+            </div>
+
+
+            <div class="customer-detail-item">
+
+                <span>District</span>
+
+                <strong>
+                    {{ customer.district|default:"Not provided" }}
+                </strong>
+
+            </div>
+
+
+            <div class="customer-detail-item full-width">
+
+                <span>Address</span>
+
+                <strong>
+                    {{ customer.address|default:"Not provided" }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- System Information -->
+    <div class="customer-detail-section">
+
+        <div class="customer-detail-section-title">
+            <i class="fa fa-clock"></i>
+            System Information
+        </div>
+
+        <div class="customer-detail-grid">
+
+            <div class="customer-detail-item">
+
+                <span>Customer Since</span>
+
+                <strong>
+                    {{ customer.created_at|date:"d M Y, h:i A" }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Future CRM Modules -->
+    <div class="customer-coming-soon">
+
+        <div>
+            <i class="fa fa-layer-group"></i>
+        </div>
+
+        <div>
+            <strong>Customer Activity</strong>
+
+            <p>
+                Leads, deals, activities, quotations and invoices
+                will appear here.
+            </p>
+        </div>
+
+    </div>
+
+</div>
+
 
 </div>
 
