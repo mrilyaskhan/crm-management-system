@@ -98,23 +98,75 @@ class CustomerForm(forms.ModelForm):
 
 class LeadForm(forms.ModelForm):
 
+    customer = forms.ModelChoiceField(
+        queryset=Customer.objects.all(),
+        required=False,
+        empty_label="Select Customer"
+    )
+
     assigned_to = forms.ModelChoiceField(
         queryset=User.objects.all(),
         required=False,
-        empty_label="Select User"
+        empty_label="Select Salesperson"
     )
 
     class Meta:
         model = Lead
+
         fields = [
             'name',
             'phone',
             'email',
             'source',
             'status',
-            'assigned_to'
+            'customer',
+            'assigned_to',
         ]
 
+        labels = {
+            'name': 'Lead Name',
+            'phone': 'Mobile Number',
+            'email': 'Email Address',
+            'source': 'Lead Source',
+            'status': 'Lead Status',
+            'customer': 'Customer',
+            'assigned_to': 'Assigned Salesperson',
+        }
+
+        widgets = {
+
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter lead name'
+            }),
+
+            'phone': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '+966 5XXXXXXXX'
+            }),
+
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'lead@example.com'
+            }),
+
+            'source': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g. WhatsApp, Website, Referral'
+            }),
+
+            'status': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+
+            'customer': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+
+            'assigned_to': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+        }
 
 class DealForm(forms.ModelForm):
 

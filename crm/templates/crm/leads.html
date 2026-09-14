@@ -2,141 +2,367 @@
 
 {% block content %}
 
-<div class="card-box">
+<div class="ksa-leads-page">
 
-    <div class="page-header">
-        <h2>Leads 🔥</h2>
+    <!-- =========================================
+         HEADER
+    ========================================= -->
+
+    <div class="ksa-leads-header">
+
+        <div class="ksa-leads-title">
+
+            <h2>
+                <i class="fa fa-fire"></i>
+                Leads
+            </h2>
+
+        </div>
+
         {% if user.groups.first and user.groups.first.name == "Admin" %}
-            <a href="{% url 'add_lead' %}" class="btn btn-primary">
-                <i class="fa fa-plus"></i> Add Lead
+
+            <a
+                href="{% url 'add_lead' %}"
+                class="ksa-leads-add-btn"
+            >
+                <i class="fa fa-plus"></i>
+                Add Lead
             </a>
+
         {% endif %}
-    </div>
-
-    <form method="GET" class="search-form">
-
-    <div class="search-box">
-
-        <input
-            type="text"
-            name="search"
-            class="form-control"
-            placeholder="🔍 Search by Name, Phone, Email or Source..."
-            value="{{ search }}">
-
-        <select name="status" class="form-control">
-
-            <option value="">All Status</option>
-
-            <option value="new"
-                {% if status == "new" %}selected{% endif %}>
-                New
-            </option>
-
-            <option value="contacted"
-                {% if status == "contacted" %}selected{% endif %}>
-                Contacted
-            </option>
-
-            <option value="qualified"
-                {% if status == "qualified" %}selected{% endif %}>
-                Qualified
-            </option>
-
-            <option value="won"
-                {% if status == "won" %}selected{% endif %}>
-                Won
-            </option>
-
-            <option value="lost"
-                {% if status == "lost" %}selected{% endif %}>
-                Lost
-            </option>
-
-        </select>
-
-        <button type="submit" class="btn btn-primary">
-            Search
-        </button>
-
-        <a href="{% url 'leads' %}" class="btn btn-secondary">
-            Reset
-        </a>
 
     </div>
 
-</form>
 
-    <table class="table table-hover mt-3">
+    <!-- =========================================
+         SEARCH & FILTER TOOLBAR
+    ========================================= -->
 
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Email</th>
-                <th>Source</th>
-                <th>Status</th>
-                 <th>Assigned To</th>
-                <th>Created</th>
-                <th>Action</th>
-            </tr>
-        </thead>
+    <div class="ksa-leads-toolbar">
 
-        <tbody>
-            {% for l in leads %}
-            <tr>
-                <td>
-                    <a href="{% url 'lead_detail' l.id %}" class="record-link">
-                        {{ l.name }}
-                    </a>
-                </td>
-                <td>{{ l.phone }}</td>
-                <td>{{ l.email }}</td>
-                <td>{{ l.source }}</td>
+        <form
+            method="GET"
+            class="ksa-leads-filter-form"
+        >
 
-                <td>
-                    {% if l.status == "new" %}
-                        <span class="badge bg-primary">New</span>
+            <!-- Search -->
+            <div class="ksa-leads-field ksa-leads-search-field">
 
-                    {% elif l.status == "contacted" %}
-                        <span class="badge bg-warning text-dark">Contacted</span>
+                <label for="ksa-leads-search">
+                    Search
+                </label>
 
-                    {% elif l.status == "qualified" %}
-                        <span class="badge bg-info">Qualified</span>
+                <div class="ksa-leads-search-wrap">
 
-                    {% elif l.status == "won" %}
-                        <span class="badge bg-success">Won</span>
+                    <i class="fa fa-search"></i>
 
-                    {% elif l.status == "lost" %}
-                        <span class="badge bg-danger">Lost</span>
-                    {% endif %}
-                </td>
-                <td>
-                    {% if l.assigned_to %}
-                        {{ l.assigned_to.username }}
-                    {% else %}
-                        Not Assigned
-                    {% endif %}
-                </td>
-                <td>{{ l.created_at }}</td>
+                    <input
+                        type="text"
+                        id="ksa-leads-search"
+                        name="search"
+                        value="{{ search }}"
+                        placeholder="Name, phone, email or source"
+                    >
 
-                <!-- ✅ ACTION BUTTON -->
-                <td>
-                    <a href="{% url 'convert_lead' l.id %}" class="btn btn-success btn-sm">
-                        <i class="fa fa-exchange-alt"></i> Convert
-                    </a>
-                </td>
+                </div>
 
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="7">No leads found</td>
-            </tr>
-            {% endfor %}
+            </div>
 
-        </tbody>
 
-    </table>
+            <!-- Status -->
+            <div class="ksa-leads-field ksa-leads-status-field">
+
+                <label for="ksa-leads-status">
+                    Status
+                </label>
+
+                <select
+                    id="ksa-leads-status"
+                    name="status"
+                >
+
+                    <option value="">
+                        All Status
+                    </option>
+
+                    <option
+                        value="new"
+                        {% if status == "new" %}selected{% endif %}
+                    >
+                        New
+                    </option>
+
+                    <option
+                        value="contacted"
+                        {% if status == "contacted" %}selected{% endif %}
+                    >
+                        Contacted
+                    </option>
+
+                    <option
+                        value="qualified"
+                        {% if status == "qualified" %}selected{% endif %}
+                    >
+                        Qualified
+                    </option>
+
+                    <option
+                        value="won"
+                        {% if status == "won" %}selected{% endif %}
+                    >
+                        Won
+                    </option>
+
+                    <option
+                        value="lost"
+                        {% if status == "lost" %}selected{% endif %}
+                    >
+                        Lost
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- Search -->
+            <button
+                type="submit"
+                class="ksa-leads-search-btn"
+            >
+                <i class="fa fa-search"></i>
+                Search
+            </button>
+
+
+            <!-- Reset -->
+            <a
+                href="{% url 'leads' %}"
+                class="ksa-leads-reset-btn"
+            >
+                <i class="fa fa-rotate-left"></i>
+                Reset
+            </a>
+
+        </form>
+
+    </div>
+
+
+    <!-- =========================================
+         LEADS TABLE
+    ========================================= -->
+
+    <div class="ksa-leads-table-card">
+
+        <div class="ksa-leads-table-header">
+
+            <div>
+
+                <h3>Lead Directory</h3>
+
+                <p>
+                    {{ leads|length }}
+                    lead{{ leads|length|pluralize }}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="ksa-leads-table-wrapper">
+
+            <table class="ksa-leads-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Lead</th>
+                        <th>Mobile</th>
+                        <th>Email</th>
+                        <th>Source</th>
+                        <th>Status</th>
+                        <th>Assigned To</th>
+                        <th>Created</th>
+                        <th class="ksa-leads-action-head">Action</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for l in leads %}
+
+                    <tr>
+
+                        <!-- Lead -->
+                        <td>
+
+                            <a
+                                href="{% url 'lead_detail' l.id %}"
+                                class="ksa-lead-name"
+                            >
+                                {{ l.name }}
+                            </a>
+
+                        </td>
+
+
+                        <!-- Phone -->
+                        <td>
+                            {{ l.phone|default:"—" }}
+                        </td>
+
+
+                        <!-- Email -->
+                        <td>
+                            {{ l.email|default:"—" }}
+                        </td>
+
+
+                        <!-- Source -->
+                        <td>
+                            {{ l.source|default:"—" }}
+                        </td>
+
+
+                        <!-- Status -->
+                        <td>
+
+                            {% if l.status == "new" %}
+
+                                <span class="ksa-lead-status ksa-status-new">
+                                    New
+                                </span>
+
+                            {% elif l.status == "contacted" %}
+
+                                <span class="ksa-lead-status ksa-status-contacted">
+                                    Contacted
+                                </span>
+
+                            {% elif l.status == "qualified" %}
+
+                                <span class="ksa-lead-status ksa-status-qualified">
+                                    Qualified
+                                </span>
+
+                            {% elif l.status == "won" %}
+
+                                <span class="ksa-lead-status ksa-status-won">
+                                    Won
+                                </span>
+
+                            {% elif l.status == "lost" %}
+
+                                <span class="ksa-lead-status ksa-status-lost">
+                                    Lost
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- Assigned -->
+                        <td>
+
+                            {% if l.assigned_to %}
+
+                                <span class="ksa-lead-assigned">
+                                    {{ l.assigned_to.username }}
+                                </span>
+
+                            {% else %}
+
+                                <span class="ksa-lead-not-assigned">
+                                    Not Assigned
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- Created -->
+                        <td>
+
+                            <span class="ksa-lead-created">
+                                {{ l.created_at|date:"d M Y, h:i A" }}
+                            </span>
+
+                        </td>
+
+
+                        <!-- Action -->
+                        <td class="ksa-leads-action-cell">
+                            <a
+                                href="{% url 'lead_detail' l.id %}"
+                                class="ksa-lead-view-btn"
+                                title="View Lead"
+                                aria-label="View Lead"
+                            >
+                                <i class="fa fa-eye"></i>
+                            </a>
+
+                            {% if user.groups.first and user.groups.first.name == "Admin" %}
+
+                                <a
+                                    href="{% url 'convert_lead' l.id %}"
+                                    class="ksa-lead-convert-btn"
+                                    title="Convert Lead"
+                                    aria-label="Convert Lead"
+                                >
+                                    <i class="fa fa-arrow-right-arrow-left"></i>
+                                </a>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td
+                            colspan="8"
+                            class="ksa-leads-empty-cell"
+                        >
+
+                            <div class="ksa-leads-empty">
+
+                                <div class="ksa-leads-empty-icon">
+                                    <i class="fa fa-fire"></i>
+                                </div>
+
+                                <h4>No Leads Found</h4>
+
+                                <p>
+                                    No leads match your current search or filter.
+                                </p>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
 
 </div>
 
