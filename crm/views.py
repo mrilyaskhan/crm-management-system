@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.utils import timezone
 from .models import Lead, Customer, Deal, Activity
 from .forms import ActivityForm
 from .forms import CustomerForm, LeadForm, DealForm
@@ -435,28 +436,50 @@ def add_activity(request):
 
     initial = {}
 
+    # Lead context
     if lead_id:
         lead = get_object_or_404(
             Lead,
             id=lead_id
         )
+
         initial['lead'] = lead
 
+    # Customer context
     if customer_id:
         customer = get_object_or_404(
             Customer,
             id=customer_id
         )
+
         initial['customer'] = customer
 
     if request.method == 'POST':
 
-        form = ActivityForm(request.POST)
+        # Copy submitted data so we can control
+        # which relation is selected.
+        post_data = request.POST.copy()
+
+        # If activity was opened from a Lead,
+        # always keep Lead and clear Customer.
+        if lead_id:
+            post_data['lead'] = lead_id
+            post_data['customer'] = ''
+
+        # If activity was opened from a Customer,
+        # always keep Customer and clear Lead.
+        elif customer_id:
+            post_data['customer'] = customer_id
+            post_data['lead'] = ''
+
+        form = ActivityForm(post_data)
 
         if form.is_valid():
 
             activity = form.save(commit=False)
 
+            # Sales users can only create activities
+            # for themselves.
             if not is_admin(request.user):
                 activity.assigned_to = request.user
 
@@ -467,6 +490,7 @@ def add_activity(request):
             return redirect('activities')
 
     else:
+
         form = ActivityForm(
             initial=initial
         )

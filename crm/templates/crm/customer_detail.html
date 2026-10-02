@@ -4,244 +4,427 @@
 
 <div class="customer-detail-page">
 
-<!-- Header -->
-<div class="customer-detail-header">
+    <!-- Header -->
+    <div class="customer-detail-header">
 
-    <div>
-        <h2>
-            <i class="fa fa-user-circle"></i>
-            Customer Profile
-        </h2>
+        <div>
+            <h2>
+                <i class="fa fa-user-circle"></i>
+                Customer Profile
+            </h2>
 
-        <p>Customer information and business details</p>
-    </div>
-
-    <a href="{% url 'customers' %}" class="customer-back-btn">
-        <i class="fa fa-arrow-left"></i>
-        Back to Customers
-    </a>
-
-</div>
-
-
-<!-- Main Customer Card -->
-<div class="customer-detail-card">
-
-    <!-- Customer Identity -->
-    <div class="customer-identity">
-
-        <div class="customer-detail-avatar">
-            <i class="fa fa-user"></i>
+            <p>Customer information and business details</p>
         </div>
 
-        <div class="customer-identity-info">
+        <a
+            href="{% url 'customers' %}"
+            class="customer-back-btn"
+        >
+            <i class="fa fa-arrow-left"></i>
+            Back to Customers
+        </a>
 
-            <h3>
-                {{ customer.name }}
-            </h3>
+    </div>
 
-            {% if customer.arabic_name %}
-                <p class="customer-arabic-name">
-                    {{ customer.arabic_name }}
-                </p>
-            {% endif %}
 
-            <div class="customer-type-badge">
+    <!-- Main Customer Card -->
+    <div class="customer-detail-card">
 
-                {% if customer.customer_type == 'B2B' %}
-                    <span class="customer-badge b2b-badge">
-                        <i class="fa fa-building"></i>
-                        B2B — Business
-                    </span>
-                {% else %}
-                    <span class="customer-badge b2c-badge">
-                        <i class="fa fa-user"></i>
-                        B2C — Individual
-                    </span>
+        <!-- Customer Identity -->
+        <div class="customer-identity">
+
+            <div class="customer-detail-avatar">
+                <i class="fa fa-user"></i>
+            </div>
+
+            <div class="customer-identity-info">
+
+                <h3>
+                    {{ customer.name }}
+                </h3>
+
+                {% if customer.arabic_name %}
+                    <p class="customer-arabic-name">
+                        {{ customer.arabic_name }}
+                    </p>
                 {% endif %}
 
+                <div class="customer-type-badge">
+
+                    {% if customer.customer_type == 'B2B' %}
+
+                        <span class="customer-badge b2b-badge">
+                            <i class="fa fa-building"></i>
+                            B2B — Business
+                        </span>
+
+                    {% else %}
+
+                        <span class="customer-badge b2c-badge">
+                            <i class="fa fa-user"></i>
+                            B2C — Individual
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
             </div>
 
         </div>
+
+
+        <!-- Contact Information -->
+        <div class="customer-detail-section">
+
+            <div class="customer-detail-section-title">
+                <i class="fa fa-address-book"></i>
+                Contact Information
+            </div>
+
+            <div class="customer-detail-grid">
+
+                <div class="customer-detail-item">
+
+                    <span>Mobile Number</span>
+
+                    <strong>
+                        {{ customer.phone|default:"Not provided" }}
+                    </strong>
+
+                </div>
+
+
+                <div class="customer-detail-item">
+
+                    <span>Email Address</span>
+
+                    <strong>
+                        {{ customer.email|default:"Not provided" }}
+                    </strong>
+
+                </div>
+
+
+                <div class="customer-detail-item">
+
+                    <span>Company</span>
+
+                    <strong>
+                        {{ customer.company|default:"Not provided" }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Saudi Business Information -->
+        <div class="customer-detail-section">
+
+            <div class="customer-detail-section-title">
+                <i class="fa fa-building"></i>
+                Saudi Business Information
+            </div>
+
+            <div class="customer-detail-grid">
+
+                <div class="customer-detail-item">
+
+                    <span>VAT Number</span>
+
+                    <strong>
+                        {{ customer.vat_number|default:"Not provided" }}
+                    </strong>
+
+                </div>
+
+
+                <div class="customer-detail-item">
+
+                    <span>Commercial Registration (CR)</span>
+
+                    <strong>
+                        {{ customer.cr_number|default:"Not provided" }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Location -->
+        <div class="customer-detail-section">
+
+            <div class="customer-detail-section-title">
+                <i class="fa fa-location-dot"></i>
+                Location
+            </div>
+
+            <div class="customer-detail-grid">
+
+                <div class="customer-detail-item">
+
+                    <span>City</span>
+
+                    <strong>
+                        {{ customer.city|default:"Not provided" }}
+                    </strong>
+
+                </div>
+
+
+                <div class="customer-detail-item">
+
+                    <span>District</span>
+
+                    <strong>
+                        {{ customer.district|default:"Not provided" }}
+                    </strong>
+
+                </div>
+
+
+                <div class="customer-detail-item full-width">
+
+                    <span>Address</span>
+
+                    <strong>
+                        {{ customer.address|default:"Not provided" }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- System Information -->
+        <div class="customer-detail-section">
+
+            <div class="customer-detail-section-title">
+                <i class="fa fa-clock"></i>
+                System Information
+            </div>
+
+            <div class="customer-detail-grid">
+
+                <div class="customer-detail-item">
+
+                    <span>Customer Since</span>
+
+                    <strong>
+                        {{ customer.created_at|date:"d M Y, h:i A" }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==========================================
+             CUSTOMER ACTIVITIES & FOLLOW-UPS
+        =========================================== -->
+
+        <div class="ksa-customer-activities-section">
+
+            <!-- Section Header -->
+            <div class="ksa-customer-activities-header">
+
+                <div class="ksa-customer-activities-heading">
+
+                    <div class="ksa-customer-activities-title">
+                        <i class="fa fa-calendar-check"></i>
+                        Activities & Follow-ups
+                    </div>
+
+                    <p>
+                        Manage calls, meetings, messages and follow-ups
+                        for this customer.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="{% url 'add_activity' %}?customer={{ customer.id }}"
+                    class="ksa-customer-add-activity-btn"
+                >
+                    <i class="fa fa-plus"></i>
+                    Add Activity
+                </a>
+
+            </div>
+
+
+            <!-- Activity List -->
+            <div class="ksa-customer-activities-list">
+
+                {% for activity in customer.activities.all %}
+
+                    <div class="ksa-customer-activity-item">
+
+                        <!-- Activity Icon -->
+                        <div class="ksa-customer-activity-icon">
+
+                            {% if activity.activity_type == 'call' %}
+
+                                <i class="fa fa-phone"></i>
+
+                            {% elif activity.activity_type == 'meeting' %}
+
+                                <i class="fa fa-calendar-days"></i>
+
+                            {% elif activity.activity_type == 'whatsapp' %}
+
+                                <i class="fa-brands fa-whatsapp"></i>
+
+                            {% elif activity.activity_type == 'email' %}
+
+                                <i class="fa fa-envelope"></i>
+
+                            {% elif activity.activity_type == 'follow_up' %}
+
+                                <i class="fa fa-clock"></i>
+
+                            {% else %}
+
+                                <i class="fa fa-note-sticky"></i>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Activity Content -->
+                        <div class="ksa-customer-activity-content">
+
+                            <!-- Title + Status -->
+                            <div class="ksa-customer-activity-top">
+
+                                <strong>
+                                    {{ activity.title }}
+                                </strong>
+
+
+                                {% if activity.status == 'completed' %}
+
+                                    <span class="ksa-customer-activity-status completed">
+                                        Completed
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="ksa-customer-activity-status pending">
+                                        Pending
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <!-- Activity Meta -->
+                            <div class="ksa-customer-activity-meta">
+
+                                <span>
+                                    <i class="fa fa-layer-group"></i>
+                                    {{ activity.get_activity_type_display }}
+                                </span>
+
+
+                                {% if activity.due_date %}
+
+                                    <span>
+                                        <i class="fa fa-clock"></i>
+                                        {{ activity.due_date|date:"d M Y, h:i A" }}
+                                    </span>
+
+                                {% endif %}
+
+
+                                {% if activity.assigned_to %}
+
+                                    <span>
+                                        <i class="fa fa-user"></i>
+                                        {{ activity.assigned_to.username }}
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <!-- Notes -->
+                            {% if activity.notes %}
+
+                                <p class="ksa-customer-activity-notes">
+                                    {{ activity.notes }}
+                                </p>
+
+                            {% endif %}
+
+
+                            <!-- Complete Button -->
+                            {% if activity.status == 'pending' %}
+
+                                <a
+                                    href="{% url 'complete_activity' activity.id %}"
+                                    class="ksa-customer-activity-complete-btn"
+                                >
+                                    <i class="fa fa-check"></i>
+                                    Mark Complete
+                                </a>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                {% empty %}
+
+                    <!-- Empty State -->
+                    <div class="ksa-customer-activities-empty">
+
+                        <div class="ksa-customer-activities-empty-icon">
+                            <i class="fa fa-calendar-xmark"></i>
+                        </div>
+
+                        <h4>
+                            No activities yet
+                        </h4>
+
+                        <p>
+                            Add a call, meeting, WhatsApp message or
+                            follow-up for this customer.
+                        </p>
+
+                        <a
+                            href="{% url 'add_activity' %}?customer={{ customer.id }}"
+                            class="ksa-customer-empty-add-btn"
+                        >
+                            <i class="fa fa-plus"></i>
+                            Add First Activity
+                        </a>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
 
     </div>
-
-
-    <!-- Contact Information -->
-    <div class="customer-detail-section">
-
-        <div class="customer-detail-section-title">
-            <i class="fa fa-address-book"></i>
-            Contact Information
-        </div>
-
-        <div class="customer-detail-grid">
-
-            <div class="customer-detail-item">
-
-                <span>Mobile Number</span>
-
-                <strong>
-                    {{ customer.phone|default:"Not provided" }}
-                </strong>
-
-            </div>
-
-
-            <div class="customer-detail-item">
-
-                <span>Email Address</span>
-
-                <strong>
-                    {{ customer.email|default:"Not provided" }}
-                </strong>
-
-            </div>
-
-
-            <div class="customer-detail-item">
-
-                <span>Company</span>
-
-                <strong>
-                    {{ customer.company|default:"Not provided" }}
-                </strong>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- Saudi Business Information -->
-    <div class="customer-detail-section">
-
-        <div class="customer-detail-section-title">
-            <i class="fa fa-building"></i>
-            Saudi Business Information
-        </div>
-
-        <div class="customer-detail-grid">
-
-            <div class="customer-detail-item">
-
-                <span>VAT Number</span>
-
-                <strong>
-                    {{ customer.vat_number|default:"Not provided" }}
-                </strong>
-
-            </div>
-
-
-            <div class="customer-detail-item">
-
-                <span>Commercial Registration (CR)</span>
-
-                <strong>
-                    {{ customer.cr_number|default:"Not provided" }}
-                </strong>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- Location -->
-    <div class="customer-detail-section">
-
-        <div class="customer-detail-section-title">
-            <i class="fa fa-location-dot"></i>
-            Location
-        </div>
-
-        <div class="customer-detail-grid">
-
-            <div class="customer-detail-item">
-
-                <span>City</span>
-
-                <strong>
-                    {{ customer.city|default:"Not provided" }}
-                </strong>
-
-            </div>
-
-
-            <div class="customer-detail-item">
-
-                <span>District</span>
-
-                <strong>
-                    {{ customer.district|default:"Not provided" }}
-                </strong>
-
-            </div>
-
-
-            <div class="customer-detail-item full-width">
-
-                <span>Address</span>
-
-                <strong>
-                    {{ customer.address|default:"Not provided" }}
-                </strong>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- System Information -->
-    <div class="customer-detail-section">
-
-        <div class="customer-detail-section-title">
-            <i class="fa fa-clock"></i>
-            System Information
-        </div>
-
-        <div class="customer-detail-grid">
-
-            <div class="customer-detail-item">
-
-                <span>Customer Since</span>
-
-                <strong>
-                    {{ customer.created_at|date:"d M Y, h:i A" }}
-                </strong>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- Future CRM Modules -->
-    <div class="customer-coming-soon">
-
-        <div>
-            <i class="fa fa-layer-group"></i>
-        </div>
-
-        <div>
-            <strong>Customer Activity</strong>
-
-            <p>
-                Leads, deals, activities, quotations and invoices
-                will appear here.
-            </p>
-        </div>
-
-    </div>
-
-</div>
-
 
 </div>
 
