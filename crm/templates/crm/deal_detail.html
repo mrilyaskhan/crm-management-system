@@ -2,103 +2,219 @@
 
 {% block content %}
 
-<div class="card-box">
+<div class="ksa-deal-detail-page">
 
-    <!-- HEADER -->
-    <div class="page-header">
+    <!-- Page Header -->
+    <div class="ksa-deal-detail-header">
 
-        <h2>💰 Deal Details</h2>
+        <div class="ksa-deal-detail-title">
 
-        <div>
-            <a href="{% url 'deals' %}" class="btn btn-secondary">
-                <i class="fa fa-arrow-left"></i> Back
+            <h2>
+                <i class="fa fa-handshake"></i>
+                Deal Details
+            </h2>
+
+            <p>
+                Complete information about this deal.
+            </p>
+
+        </div>
+
+
+        <div class="ksa-deal-detail-header-actions">
+
+            <a
+                href="{% url 'edit_deal' deal.id %}"
+                class="ksa-deal-detail-edit-btn"
+            >
+                <i class="fa fa-pen"></i>
+                Edit
             </a>
 
-            <a href="{% url 'edit_deal' deal.id %}" class="btn btn-warning">
-                <i class="fa fa-pen"></i> Edit
+            <a
+                href="{% url 'deals' %}"
+                class="ksa-deal-detail-back-btn"
+            >
+                <i class="fa fa-arrow-left"></i>
+                Back
             </a>
+
         </div>
 
     </div>
 
-    <!-- PROFILE CARD -->
-    <div class="profile-card">
 
-        <h3  class="deal-title">
-            <i class="fa fa-handshake"></i> {{ deal.title }}
-        </h3>
+    <!-- Main Deal Card -->
+    <div class="ksa-deal-detail-card">
 
-        <div class="profile-grid">
 
-            <div class="profile-item">
-                <label class="crm-label blue">
-                    <i class="fa fa-building"></i> Customer
-                </label>
-                <p>{{ deal.customer }}</p>
+        <!-- Deal Identity -->
+        <div class="ksa-deal-detail-identity">
+
+            <div class="ksa-deal-detail-avatar">
+                <i class="fa fa-handshake"></i>
             </div>
 
-            <div class="profile-item">
-                <label class="crm-label green">
-                    <i class="fa fa-money-bill"></i> Amount
-                </label>
-                <p>SAR {{ deal.amount }}</p>
+            <h3>
+                {{ deal.title }}
+            </h3>
+
+
+            <!-- Stage -->
+            {% if deal.stage == "proposal" %}
+
+                <span class="ksa-deal-detail-stage proposal">
+                    <i class="fa fa-file-lines"></i>
+                    Proposal
+                </span>
+
+            {% elif deal.stage == "negotiation" %}
+
+                <span class="ksa-deal-detail-stage negotiation">
+                    <i class="fa fa-comments"></i>
+                    Negotiation
+                </span>
+
+            {% elif deal.stage == "won" %}
+
+                <span class="ksa-deal-detail-stage won">
+                    <i class="fa fa-circle-check"></i>
+                    Won
+                </span>
+
+            {% elif deal.stage == "lost" %}
+
+                <span class="ksa-deal-detail-stage lost">
+                    <i class="fa fa-circle-xmark"></i>
+                    Lost
+                </span>
+
+            {% else %}
+
+                <span class="ksa-deal-detail-stage unknown">
+                    {{ deal.stage|default:"Unknown" }}
+                </span>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- Sales Information -->
+        <div class="ksa-deal-detail-section">
+
+            <div class="ksa-deal-detail-section-title">
+                <i class="fa fa-chart-line"></i>
+                Sales Information
             </div>
 
-            <div class="profile-item">
 
-                <label class="crm-label purple">
-                    <i class="fa fa-layer-group"></i> Stage
-                </label>
+            <div class="ksa-deal-detail-grid">
 
-                <p>
-                    {% if deal.stage == "proposal" %}
-                        <span class="badge bg-secondary">Proposal</span>
 
-                    {% elif deal.stage == "negotiation" %}
-                        <span class="badge bg-warning text-dark">Negotiation</span>
+                <!-- Customer -->
+                <div class="ksa-deal-detail-item">
 
-                    {% elif deal.stage == "won" %}
-                        <span class="badge bg-success">Won</span>
+                    <span>Customer</span>
 
-                    {% elif deal.stage == "lost" %}
-                        <span class="badge bg-danger">Lost</span>
+                    <strong>
 
-                    {% else %}
-                        <span class="badge bg-dark">
-                            {{ deal.stage|default:"Unknown" }}
-                        </span>
-                    {% endif %}
-                </p>
+                        <a
+                            href="{% url 'customer_detail' deal.customer.id %}"
+                            class="ksa-deal-detail-customer-link"
+                        >
+                            {{ deal.customer.name }}
+                        </a>
 
-            </div>
+                    </strong>
 
-            <div class="profile-item">
-               <label class="crm-label orange">
-                    <i class="fa fa-calendar"></i> Expected Close Date
-                </label>
-                <p>{{ deal.expected_close_date }}</p>
-            </div>
+                </div>
 
-            <div class="profile-item">
-                <label class="crm-label indigo">
-                    <i class="fa fa-user"></i> Created By
-                </label>
 
-                <p>
-                    <span class="badge bg-primary">
-                        {{ deal.created_by|default:"Admin" }}
-                    </span>
-                </p>
-            </div>
+                <!-- Amount -->
+                <div class="ksa-deal-detail-item">
 
-            <div class="profile-item">
-                <label class="crm-label red">
-                    <i class="fa fa-clock"></i> Created At
-                </label>
-                <p>{{ deal.created_at|date:"d M Y, H:i" }}</p>
+                    <span>Deal Amount</span>
+
+                    <strong class="ksa-deal-detail-amount">
+                        SAR {{ deal.amount }}
+                    </strong>
+
+                </div>
+
+
+                <!-- Stage -->
+                <div class="ksa-deal-detail-item">
+
+                    <span>Deal Stage</span>
+
+                    <strong>
+                        {{ deal.get_stage_display }}
+                    </strong>
+
+                </div>
+
+
+                <!-- Expected Close -->
+                <div class="ksa-deal-detail-item">
+
+                    <span>Expected Close Date</span>
+
+                    <strong>
+
+                        {% if deal.expected_close_date %}
+                            {{ deal.expected_close_date|date:"d M Y" }}
+                        {% else %}
+                            Not set
+                        {% endif %}
+
+                    </strong>
+
+                </div>
+
+
+                <!-- Created At -->
+                <div class="ksa-deal-detail-item">
+
+                    <span>Created At</span>
+
+                    <strong>
+                        {{ deal.created_at|date:"d M Y, h:i A" }}
+                    </strong>
+
+                </div>
+
             </div>
 
         </div>
+
+
+        <!-- Customer Relationship -->
+        <div class="ksa-deal-detail-related-card">
+
+            <div class="ksa-deal-detail-related-icon">
+                <i class="fa fa-user"></i>
+            </div>
+
+            <div>
+
+                <strong>
+                    Customer Relationship
+                </strong>
+
+                <p>
+                    This deal is associated with
+                    <a
+                        href="{% url 'customer_detail' deal.customer.id %}"
+                    >
+                        {{ deal.customer.name }}
+                    </a>.
+                </p>
+
+            </div>
+
+        </div>
+
 
     </div>
 

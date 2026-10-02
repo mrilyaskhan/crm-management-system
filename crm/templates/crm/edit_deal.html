@@ -2,50 +2,50 @@
 
 {% block content %}
 
-<div class="ksa-add-deal-page">
+<div class="ksa-edit-deal-page">
 
     <!-- Header -->
-    <div class="ksa-add-deal-header">
+    <div class="ksa-edit-deal-header">
 
-        <div class="ksa-add-deal-title">
+        <div class="ksa-edit-deal-title">
 
             <h2>
-                <i class="fa fa-handshake"></i>
-                Add Deal
+                <i class="fa fa-pen-to-square"></i>
+                Edit Deal
             </h2>
 
             <p>
-                Create a new sales opportunity.
+                Update the information for this deal.
             </p>
 
         </div>
 
         <a
-            href="{% url 'deals' %}"
-            class="ksa-add-deal-back-btn"
+            href="{% url 'deal_detail' deal.id %}"
+            class="ksa-edit-deal-back-btn"
         >
             <i class="fa fa-arrow-left"></i>
-            Back to Deals
+            Back to Deal
         </a>
 
     </div>
 
 
     <!-- Main Card -->
-    <div class="ksa-add-deal-card">
+    <div class="ksa-edit-deal-card">
 
         <!-- Card Header -->
-        <div class="ksa-add-deal-card-header">
+        <div class="ksa-edit-deal-card-header">
 
-            <div class="ksa-add-deal-card-icon">
-                <i class="fa fa-handshake"></i>
+            <div class="ksa-edit-deal-card-icon">
+                <i class="fa fa-pen-to-square"></i>
             </div>
 
             <div>
                 <h3>Deal Information</h3>
 
                 <p>
-                    Enter customer, amount and sales stage details.
+                    Update customer, amount, stage and close date.
                 </p>
             </div>
 
@@ -55,16 +55,14 @@
         <!-- Form -->
         <form
             method="POST"
-            class="ksa-add-deal-form"
+            class="ksa-edit-deal-form"
         >
 
             {% csrf_token %}
 
-
-            <!-- Form Error -->
             {% if form.non_field_errors %}
 
-                <div class="ksa-add-deal-form-error">
+                <div class="ksa-edit-deal-form-error">
 
                     <i class="fa fa-circle-exclamation"></i>
 
@@ -77,10 +75,10 @@
             {% endif %}
 
 
-            <div class="ksa-add-deal-grid">
+            <div class="ksa-edit-deal-grid">
 
                 <!-- Customer -->
-                <div class="ksa-add-deal-field">
+                <div class="ksa-edit-deal-field">
 
                     <label for="{{ form.customer.id_for_label }}">
                         {{ form.customer.label }}
@@ -89,7 +87,7 @@
                     {{ form.customer }}
 
                     {% if form.customer.errors %}
-                        <div class="ksa-add-deal-field-error">
+                        <div class="ksa-edit-deal-field-error">
                             {{ form.customer.errors }}
                         </div>
                     {% endif %}
@@ -98,7 +96,7 @@
 
 
                 <!-- Deal Title -->
-                <div class="ksa-add-deal-field">
+                <div class="ksa-edit-deal-field">
 
                     <label for="{{ form.title.id_for_label }}">
                         {{ form.title.label }}
@@ -107,7 +105,7 @@
                     {{ form.title }}
 
                     {% if form.title.errors %}
-                        <div class="ksa-add-deal-field-error">
+                        <div class="ksa-edit-deal-field-error">
                             {{ form.title.errors }}
                         </div>
                     {% endif %}
@@ -116,19 +114,19 @@
 
 
                 <!-- Amount -->
-                <div class="ksa-add-deal-field">
+                <div class="ksa-edit-deal-field">
 
                     <label for="{{ form.amount.id_for_label }}">
                         {{ form.amount.label }}
                     </label>
 
-                    <div class="ksa-add-deal-amount-wrap">
+                    <div class="ksa-edit-deal-amount-wrap">
                         <span>SAR</span>
                         {{ form.amount }}
                     </div>
 
                     {% if form.amount.errors %}
-                        <div class="ksa-add-deal-field-error">
+                        <div class="ksa-edit-deal-field-error">
                             {{ form.amount.errors }}
                         </div>
                     {% endif %}
@@ -137,7 +135,7 @@
 
 
                 <!-- Stage -->
-                <div class="ksa-add-deal-field">
+                <div class="ksa-edit-deal-field">
 
                     <label for="{{ form.stage.id_for_label }}">
                         {{ form.stage.label }}
@@ -146,7 +144,7 @@
                     {{ form.stage }}
 
                     {% if form.stage.errors %}
-                        <div class="ksa-add-deal-field-error">
+                        <div class="ksa-edit-deal-field-error">
                             {{ form.stage.errors }}
                         </div>
                     {% endif %}
@@ -155,7 +153,7 @@
 
 
                 <!-- Expected Close -->
-                <div class="ksa-add-deal-field">
+                <div class="ksa-edit-deal-field">
 
                     <label for="{{ form.expected_close_date.id_for_label }}">
                         {{ form.expected_close_date.label }}
@@ -164,7 +162,7 @@
                     {{ form.expected_close_date }}
 
                     {% if form.expected_close_date.errors %}
-                        <div class="ksa-add-deal-field-error">
+                        <div class="ksa-edit-deal-field-error">
                             {{ form.expected_close_date.errors }}
                         </div>
                     {% endif %}
@@ -175,21 +173,21 @@
 
 
             <!-- Actions -->
-            <div class="ksa-add-deal-actions">
+            <div class="ksa-edit-deal-actions">
 
                 <a
-                    href="{% url 'deals' %}"
-                    class="ksa-add-deal-cancel-btn"
+                    href="{% url 'deal_detail' deal.id %}"
+                    class="ksa-edit-deal-cancel-btn"
                 >
                     Cancel
                 </a>
 
                 <button
                     type="submit"
-                    class="ksa-add-deal-save-btn"
+                    class="ksa-edit-deal-save-btn"
                 >
                     <i class="fa fa-check"></i>
-                    Save Deal
+                    Update Deal
                 </button>
 
             </div>

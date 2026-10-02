@@ -129,4 +129,10 @@ urlpatterns = [
         views.edit_profile,
         name='edit_profile'
     ),
+
+    path(
+        'deals/edit/<int:pk>/',
+        views.edit_deal,
+        name='edit_deal'
+    ),
 ]

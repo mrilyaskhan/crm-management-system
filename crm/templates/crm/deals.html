@@ -2,75 +2,246 @@
 
 {% block content %}
 
-<div class="card-box">
+<div class="ksa-deals-page">
 
-    <div class="page-header">
+    <!-- Page Header -->
+    <div class="ksa-deals-header">
 
-        <h2>Deals 💰</h2>
+        <div class="ksa-deals-title">
 
-        <a href="{% url 'add_deal' %}"
-           class="btn btn-primary">
-            + Add Deal
+            <h2>
+                <i class="fa fa-handshake"></i>
+                Deals
+            </h2>
+
+            <p>
+                Manage your sales opportunities and pipeline.
+            </p>
+
+        </div>
+
+        <a
+            href="{% url 'add_deal' %}"
+            class="ksa-deals-add-btn"
+        >
+            <i class="fa fa-plus"></i>
+            Add Deal
         </a>
 
     </div>
 
-    <table class="table table-hover">
 
-        <thead>
-            <tr>
-                <th>Customer</th>
-                <th>Title</th>
-                <th>Amount</th>
-                <th>Stage</th>
-                <th>Expected Close</th>
-            </tr>
-        </thead>
+    <!-- Deals Card -->
+    <div class="ksa-deals-card">
 
-        <tbody>
+        <div class="ksa-deals-table-wrapper">
 
-            {% for d in deals %}
-            <tr>
+            <table class="ksa-deals-table">
 
-                <td>{{ d.customer }}</td>
+                <thead>
 
-                <td>
-                    <a href="{% url 'deal_detail' d.id %}" class="record-link">
-                        {{ d.title }}
-                    </a>
-                </td>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Deal</th>
+                        <th>Amount</th>
+                        <th>Stage</th>
+                        <th>Expected Close</th>
+                        <th class="ksa-deals-action-head">
+                            Action
+                        </th>
+                    </tr>
 
-                <td>SAR {{ d.amount }}</td>
+                </thead>
 
-                <td>
-                    {% if d.stage == "proposal" %}
-                        <span class="badge bg-secondary">Proposal</span>
+                <tbody>
 
-                    {% elif d.stage == "negotiation" %}
-                        <span class="badge bg-warning text-dark">Negotiation</span>
+                    {% for d in deals %}
 
-                    {% elif d.stage == "won" %}
-                        <span class="badge bg-success">Won</span>
+                    <tr>
 
-                    {% elif d.stage == "lost" %}
-                        <span class="badge bg-danger">Lost</span>
-                    {% endif %}
-                </td>
+                        <!-- Customer -->
+                        <td>
 
-                <td>{{ d.expected_close_date }}</td>
+                            <a
+                                href="{% url 'customer_detail' d.customer.id %}"
+                                class="ksa-deal-customer-link"
+                            >
+                                <span class="ksa-deal-customer-icon">
+                                    <i class="fa fa-user"></i>
+                                </span>
 
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="5">
-                    No deals found
-                </td>
-            </tr>
-            {% endfor %}
+                                {{ d.customer.name }}
 
-        </tbody>
+                            </a>
 
-    </table>
+                        </td>
+
+
+                        <!-- Deal -->
+                        <td>
+
+                            <div class="ksa-deal-name">
+
+                                <div class="ksa-deal-name-icon">
+                                    <i class="fa fa-handshake"></i>
+                                </div>
+
+                                <div>
+                                    <strong>
+                                        {{ d.title }}
+                                    </strong>
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- Amount -->
+                        <td>
+
+                            <span class="ksa-deal-amount">
+                                SAR {{ d.amount }}
+                            </span>
+
+                        </td>
+
+
+                        <!-- Stage -->
+                        <td>
+
+                            {% if d.stage == "proposal" %}
+
+                                <span class="ksa-deal-stage proposal">
+                                    <i class="fa fa-file-lines"></i>
+                                    Proposal
+                                </span>
+
+                            {% elif d.stage == "negotiation" %}
+
+                                <span class="ksa-deal-stage negotiation">
+                                    <i class="fa fa-comments"></i>
+                                    Negotiation
+                                </span>
+
+                            {% elif d.stage == "won" %}
+
+                                <span class="ksa-deal-stage won">
+                                    <i class="fa fa-circle-check"></i>
+                                    Won
+                                </span>
+
+                            {% elif d.stage == "lost" %}
+
+                                <span class="ksa-deal-stage lost">
+                                    <i class="fa fa-circle-xmark"></i>
+                                    Lost
+                                </span>
+
+                            {% else %}
+
+                                <span class="ksa-deal-stage unknown">
+                                    {{ d.stage|default:"Unknown" }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- Expected Close -->
+                        <td>
+
+                            {% if d.expected_close_date %}
+
+                                <span class="ksa-deal-date">
+                                    <i class="fa fa-calendar"></i>
+                                    {{ d.expected_close_date|date:"d M Y" }}
+                                </span>
+
+                            {% else %}
+
+                                <span class="ksa-deal-muted">
+                                    Not set
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- Action -->
+                        <td class="ksa-deals-action-cell">
+
+                            <a
+                                href="{% url 'deal_detail' d.id %}"
+                                class="ksa-deal-view-btn"
+                                title="View Deal"
+                                aria-label="View Deal"
+                            >
+                                <i class="fa fa-eye"></i>
+                            </a>
+
+                            <a
+                                href="{% url 'edit_deal' d.id %}"
+                                class="ksa-deal-edit-btn"
+                                title="Edit Deal"
+                                aria-label="Edit Deal"
+                            >
+                                <i class="fa fa-pen"></i>
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td
+                            colspan="6"
+                            class="ksa-deals-empty-cell"
+                        >
+
+                            <div class="ksa-deals-empty">
+
+                                <div class="ksa-deals-empty-icon">
+                                    <i class="fa fa-handshake"></i>
+                                </div>
+
+                                <h4>
+                                    No deals yet
+                                </h4>
+
+                                <p>
+                                    Create your first deal to start
+                                    managing the sales pipeline.
+                                </p>
+
+                                <a
+                                    href="{% url 'add_deal' %}"
+                                    class="ksa-deals-empty-btn"
+                                >
+                                    <i class="fa fa-plus"></i>
+                                    Add First Deal
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
 
 </div>
 
