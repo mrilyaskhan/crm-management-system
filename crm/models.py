@@ -69,6 +69,7 @@ class Customer(models.Model):
     def __str__(self):
         return self.name
 
+
 class Deal(models.Model):
 
     STAGE_CHOICES = [
@@ -107,6 +108,7 @@ class Deal(models.Model):
 
     def __str__(self):
         return self.title
+
 
 class Lead(models.Model):
 
@@ -175,3 +177,95 @@ class Lead(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Activity(models.Model):
+
+    ACTIVITY_TYPE_CHOICES = [
+        ('call', 'Call'),
+        ('meeting', 'Meeting'),
+        ('whatsapp', 'WhatsApp'),
+        ('email', 'Email'),
+        ('follow_up', 'Follow-up'),
+        ('note', 'Note'),
+    ]
+
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('completed', 'Completed'),
+    ]
+
+    title = models.CharField(
+        max_length=200
+    )
+
+    activity_type = models.CharField(
+        max_length=20,
+        choices=ACTIVITY_TYPE_CHOICES,
+        default='follow_up'
+    )
+
+    # Activity can be linked to a Lead
+    lead = models.ForeignKey(
+        Lead,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='activities'
+    )
+
+    # Activity can be linked to a Customer
+    customer = models.ForeignKey(
+        Customer,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='activities'
+    )
+
+    # Salesperson responsible for activity
+    assigned_to = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='assigned_activities'
+    )
+
+    # Activity due date and time
+    due_date = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='pending'
+    )
+
+    notes = models.TextField(
+        blank=True,
+        null=True
+    )
+
+    # User who created the activity
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='created_activities'
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    completed_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    def __str__(self):
+        return self.title

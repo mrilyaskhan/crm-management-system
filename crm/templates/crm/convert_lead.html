@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="ksa-convert-page">
+
+    <!-- Page Header -->
+    <div class="ksa-convert-header">
+
+        <div class="ksa-convert-title">
+            <h2>
+                <i class="fa fa-arrow-right-arrow-left"></i>
+                Convert Lead
+            </h2>
+
+            <p>Review the lead information before conversion</p>
+        </div>
+
+        <a
+            href="{% url 'lead_detail' lead.id %}"
+            class="ksa-convert-back-btn"
+        >
+            <i class="fa fa-arrow-left"></i>
+            Back to Lead
+        </a>
+
+    </div>
+
+
+    <!-- Main Card -->
+    <div class="ksa-convert-card">
+
+        <!-- Card Header -->
+        <div class="ksa-convert-card-header">
+
+            <div class="ksa-convert-icon">
+                <i class="fa fa-user-check"></i>
+            </div>
+
+            <div>
+                <h3>Convert Lead to Customer</h3>
+                <p>
+                    Review the information below and confirm the conversion.
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- Lead Information -->
+        <div class="ksa-convert-section">
+
+            <div class="ksa-convert-section-title">
+                <i class="fa fa-user"></i>
+                Lead Information
+            </div>
+
+            <div class="ksa-convert-grid">
+
+                <div class="ksa-convert-item">
+                    <span>Lead Name</span>
+                    <strong>{{ lead.name }}</strong>
+                </div>
+
+                <div class="ksa-convert-item">
+                    <span>Mobile Number</span>
+                    <strong>{{ lead.phone|default:"Not provided" }}</strong>
+                </div>
+
+                <div class="ksa-convert-item">
+                    <span>Email Address</span>
+                    <strong>{{ lead.email|default:"Not provided" }}</strong>
+                </div>
+
+                <div class="ksa-convert-item">
+                    <span>Lead Source</span>
+                    <strong>{{ lead.source|default:"Not provided" }}</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Sales Information -->
+        <div class="ksa-convert-section">
+
+            <div class="ksa-convert-section-title">
+                <i class="fa fa-chart-line"></i>
+                Sales Information
+            </div>
+
+            <div class="ksa-convert-grid">
+
+                <div class="ksa-convert-item">
+                    <span>Status</span>
+                    <strong>{{ lead.get_status_display }}</strong>
+                </div>
+
+                <div class="ksa-convert-item">
+                    <span>Assigned Salesperson</span>
+
+                    <strong>
+                        {% if lead.assigned_to %}
+                            {{ lead.assigned_to.username }}
+                        {% else %}
+                            Not assigned
+                        {% endif %}
+                    </strong>
+                </div>
+
+                <div class="ksa-convert-item">
+                    <span>Customer</span>
+
+                    <strong>
+                        {% if lead.customer %}
+                            {{ lead.customer.name }}
+                        {% else %}
+                            New Customer
+                        {% endif %}
+                    </strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Warning -->
+        <div class="ksa-convert-warning">
+
+            <div class="ksa-convert-warning-icon">
+                <i class="fa fa-circle-info"></i>
+            </div>
+
+            <div>
+                <strong>Conversion Confirmation</strong>
+
+                <p>
+                    This lead will be linked to a customer and marked as
+                    <b>Won</b>. The original lead record will remain in the CRM.
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- Actions -->
+        <form method="POST" class="ksa-convert-actions">
+
+            {% csrf_token %}
+
+            <a
+                href="{% url 'lead_detail' lead.id %}"
+                class="ksa-convert-cancel-btn"
+            >
+                Cancel
+            </a>
+
+            <button
+                type="submit"
+                class="ksa-convert-confirm-btn"
+            >
+                <i class="fa fa-check"></i>
+                Confirm Conversion
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

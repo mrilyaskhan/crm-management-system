@@ -138,7 +138,14 @@
 
                     <strong>
                         {% if lead.customer %}
-                            {{ lead.customer.name }}
+
+                            <a
+                                href="{% url 'customer_detail' lead.customer.id %}"
+                                class="ksa-lead-detail-customer-link"
+                            >
+                                {{ lead.customer.name }}
+                            </a>
+
                         {% else %}
                             Not linked
                         {% endif %}
@@ -173,23 +180,200 @@
         </div>
 
 
-        <!-- Future Activity -->
-        <div class="ksa-lead-detail-future">
+        <!-- ==========================================
+             ACTIVITIES & FOLLOW-UPS
+        =========================================== -->
 
-            <div class="ksa-lead-detail-future-icon">
-                <i class="fa fa-layer-group"></i>
+        <div class="ksa-lead-activities-section">
+
+            <div class="ksa-lead-activities-header">
+
+                <div class="ksa-lead-activities-heading">
+
+                    <div class="ksa-lead-activities-title">
+                        <i class="fa fa-calendar-check"></i>
+                        Activities & Follow-ups
+                    </div>
+
+                    <p>
+                        Manage calls, meetings, messages and follow-ups
+                        for this lead.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="{% url 'add_activity' %}?lead={{ lead.id }}"
+                    class="ksa-lead-add-activity-btn"
+                >
+                    <i class="fa fa-plus"></i>
+                    Add Activity
+                </a>
+
             </div>
 
-            <div>
-                <strong>Lead Activity</strong>
 
-                <p>
-                    Calls, WhatsApp messages, meetings and follow-ups
-                    will appear here.
-                </p>
+            <!-- Activity List -->
+
+            <div class="ksa-lead-activities-list">
+
+                {% for activity in lead.activities.all %}
+
+                    <div class="ksa-lead-activity-item">
+
+                        <!-- Activity Icon -->
+                        <div class="ksa-lead-activity-icon">
+
+                            {% if activity.activity_type == 'call' %}
+
+                                <i class="fa fa-phone"></i>
+
+                            {% elif activity.activity_type == 'meeting' %}
+
+                                <i class="fa fa-calendar-days"></i>
+
+                            {% elif activity.activity_type == 'whatsapp' %}
+
+                                <i class="fa-brands fa-whatsapp"></i>
+
+                            {% elif activity.activity_type == 'email' %}
+
+                                <i class="fa fa-envelope"></i>
+
+                            {% elif activity.activity_type == 'follow_up' %}
+
+                                <i class="fa fa-clock"></i>
+
+                            {% else %}
+
+                                <i class="fa fa-note-sticky"></i>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Activity Content -->
+                        <div class="ksa-lead-activity-content">
+
+                            <div class="ksa-lead-activity-top">
+
+                                <strong>
+                                    {{ activity.title }}
+                                </strong>
+
+
+                                {% if activity.status == 'completed' %}
+
+                                    <span class="ksa-lead-activity-status completed">
+                                        Completed
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="ksa-lead-activity-status pending">
+                                        Pending
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <!-- Activity Meta -->
+                            <div class="ksa-lead-activity-meta">
+
+                                <span>
+                                    <i class="fa fa-layer-group"></i>
+                                    {{ activity.get_activity_type_display }}
+                                </span>
+
+
+                                {% if activity.due_date %}
+
+                                    <span>
+                                        <i class="fa fa-clock"></i>
+                                        {{ activity.due_date|date:"d M Y, h:i A" }}
+                                    </span>
+
+                                {% endif %}
+
+
+                                {% if activity.assigned_to %}
+
+                                    <span>
+                                        <i class="fa fa-user"></i>
+                                        {{ activity.assigned_to.username }}
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <!-- Notes -->
+                            {% if activity.notes %}
+
+                                <p class="ksa-lead-activity-notes">
+                                    {{ activity.notes }}
+                                </p>
+
+                            {% endif %}
+
+
+                            <!-- Complete Button -->
+                            {% if activity.status == 'pending' %}
+
+                                <a
+                                    href="{% url 'complete_activity' activity.id %}"
+                                    class="ksa-lead-activity-complete-btn"
+                                >
+                                    <i class="fa fa-check"></i>
+                                    Mark Complete
+                                </a>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                {% empty %}
+
+                    <!-- Empty State -->
+
+                    <div class="ksa-lead-activities-empty">
+
+                        <div class="ksa-lead-activities-empty-icon">
+                            <i class="fa fa-calendar-xmark"></i>
+                        </div>
+
+                        <h4>
+                            No activities yet
+                        </h4>
+
+                        <p>
+                            Add a call, meeting, WhatsApp message or
+                            follow-up for this lead.
+                        </p>
+
+                        <a
+                            href="{% url 'add_activity' %}?lead={{ lead.id }}"
+                            class="ksa-lead-empty-add-btn"
+                        >
+                            <i class="fa fa-plus"></i>
+                            Add First Activity
+                        </a>
+
+                    </div>
+
+                {% endfor %}
+
             </div>
 
         </div>
+
 
     </div>
 

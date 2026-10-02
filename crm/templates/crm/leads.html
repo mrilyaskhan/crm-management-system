@@ -300,29 +300,48 @@
 
                         <!-- Action -->
                         <td class="ksa-leads-action-cell">
-                            <a
-                                href="{% url 'lead_detail' l.id %}"
-                                class="ksa-lead-view-btn"
-                                title="View Lead"
-                                aria-label="View Lead"
-                            >
-                                <i class="fa fa-eye"></i>
-                            </a>
 
-                            {% if user.groups.first and user.groups.first.name == "Admin" %}
-
+                                <!-- View Lead -->
                                 <a
-                                    href="{% url 'convert_lead' l.id %}"
-                                    class="ksa-lead-convert-btn"
-                                    title="Convert Lead"
-                                    aria-label="Convert Lead"
+                                    href="{% url 'lead_detail' l.id %}"
+                                    class="ksa-lead-view-btn"
+                                    title="View Lead"
+                                    aria-label="View Lead"
                                 >
-                                    <i class="fa fa-arrow-right-arrow-left"></i>
+                                    <i class="fa fa-eye"></i>
                                 </a>
 
-                            {% endif %}
+                                {% if user.groups.first and user.groups.first.name == "Admin" %}
 
-                        </td>
+                                    {% if l.customer %}
+
+                                        <!-- View Customer -->
+                                        <a
+                                            href="{% url 'customer_detail' l.customer.id %}"
+                                            class="ksa-lead-customer-btn"
+                                            title="View Customer"
+                                            aria-label="View Customer"
+                                        >
+                                            <i class="fa fa-user"></i>
+                                        </a>
+
+                                    {% else %}
+
+                                        <!-- Convert Lead -->
+                                        <a
+                                            href="{% url 'convert_lead' l.id %}"
+                                            class="ksa-lead-convert-btn"
+                                            title="Convert Lead"
+                                            aria-label="Convert Lead"
+                                        >
+                                            <i class="fa fa-arrow-right-arrow-left"></i>
+                                        </a>
+
+                                    {% endif %}
+
+                                {% endif %}
+
+                            </td>
 
                     </tr>
 

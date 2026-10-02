@@ -1,0 +1,257 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="ksa-add-activity-page">
+
+    <!-- Page Header -->
+    <div class="ksa-add-activity-header">
+
+        <div class="ksa-add-activity-title">
+
+            <h2>
+                <i class="fa fa-calendar-plus"></i>
+                Add Activity
+            </h2>
+
+            <p>
+                Create a call, meeting, message or follow-up activity.
+            </p>
+
+        </div>
+
+        <a
+            href="{% url 'activities' %}"
+            class="ksa-add-activity-back-btn"
+        >
+            <i class="fa fa-arrow-left"></i>
+            Back to Activities
+        </a>
+
+    </div>
+
+
+    <!-- Main Form Card -->
+    <div class="ksa-add-activity-card">
+
+        <!-- Card Header -->
+        <div class="ksa-add-activity-card-header">
+
+            <div class="ksa-add-activity-card-icon">
+                <i class="fa fa-calendar-check"></i>
+            </div>
+
+            <div>
+                <h3>
+                    Activity Information
+                </h3>
+
+                <p>
+                    Add the activity details and schedule the next action.
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- Form -->
+        <form
+            method="post"
+            class="ksa-add-activity-form"
+        >
+
+            {% csrf_token %}
+
+
+            <!-- Form Errors -->
+            {% if form.non_field_errors %}
+
+                <div class="ksa-add-activity-form-error">
+
+                    <i class="fa fa-circle-exclamation"></i>
+
+                    <div>
+                        {{ form.non_field_errors }}
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- Main Fields -->
+            <div class="ksa-add-activity-grid">
+
+                <!-- Activity Title -->
+                <div class="ksa-add-activity-field">
+
+                    <label for="{{ form.title.id_for_label }}">
+                        {{ form.title.label }}
+                    </label>
+
+                    {{ form.title }}
+
+                    {% if form.title.errors %}
+                        <div class="ksa-add-activity-field-error">
+                            {{ form.title.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Activity Type -->
+                <div class="ksa-add-activity-field">
+
+                    <label for="{{ form.activity_type.id_for_label }}">
+                        {{ form.activity_type.label }}
+                    </label>
+
+                    {{ form.activity_type }}
+
+                    {% if form.activity_type.errors %}
+                        <div class="ksa-add-activity-field-error">
+                            {{ form.activity_type.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Lead -->
+                <div class="ksa-add-activity-field">
+
+                    <label for="{{ form.lead.id_for_label }}">
+                        {{ form.lead.label }}
+                    </label>
+
+                    {{ form.lead }}
+
+                    {% if form.lead.errors %}
+                        <div class="ksa-add-activity-field-error">
+                            {{ form.lead.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Customer -->
+                <div class="ksa-add-activity-field">
+
+                    <label for="{{ form.customer.id_for_label }}">
+                        {{ form.customer.label }}
+                    </label>
+
+                    {{ form.customer }}
+
+                    {% if form.customer.errors %}
+                        <div class="ksa-add-activity-field-error">
+                            {{ form.customer.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Assigned Salesperson -->
+                <div class="ksa-add-activity-field">
+
+                    <label for="{{ form.assigned_to.id_for_label }}">
+                        {{ form.assigned_to.label }}
+                    </label>
+
+                    {{ form.assigned_to }}
+
+                    {% if form.assigned_to.errors %}
+                        <div class="ksa-add-activity-field-error">
+                            {{ form.assigned_to.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Due Date -->
+                <div class="ksa-add-activity-field">
+
+                    <label for="{{ form.due_date.id_for_label }}">
+                        {{ form.due_date.label }}
+                    </label>
+
+                    {{ form.due_date }}
+
+                    {% if form.due_date.errors %}
+                        <div class="ksa-add-activity-field-error">
+                            {{ form.due_date.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Status -->
+                <div class="ksa-add-activity-field">
+
+                    <label for="{{ form.status.id_for_label }}">
+                        {{ form.status.label }}
+                    </label>
+
+                    {{ form.status }}
+
+                    {% if form.status.errors %}
+                        <div class="ksa-add-activity-field-error">
+                            {{ form.status.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- Notes -->
+            <div class="ksa-add-activity-field ksa-add-activity-notes-field">
+
+                <label for="{{ form.notes.id_for_label }}">
+                    {{ form.notes.label }}
+                </label>
+
+                {{ form.notes }}
+
+                {% if form.notes.errors %}
+                    <div class="ksa-add-activity-field-error">
+                        {{ form.notes.errors }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            <!-- Bottom Actions -->
+            <div class="ksa-add-activity-actions">
+
+                <a
+                    href="{% url 'activities' %}"
+                    class="ksa-add-activity-cancel-btn"
+                >
+                    Cancel
+                </a>
+
+                <button
+                    type="submit"
+                    class="ksa-add-activity-save-btn"
+                >
+                    <i class="fa fa-check"></i>
+                    Save Activity
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

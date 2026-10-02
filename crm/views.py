@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
-from .models import Lead, Customer, Deal
+from .models import Lead, Customer, Deal, Activity
+from .forms import ActivityForm
 from .forms import CustomerForm, LeadForm, DealForm
 from django.db.models import Q, Sum
 from .forms import ProfileForm
@@ -232,17 +233,45 @@ def add_lead(request):
 @login_required
 @user_passes_test(is_admin)
 def convert_lead(request, lead_id):
+
     lead = get_object_or_404(Lead, id=lead_id)
 
-    Customer.objects.create(
-        name=lead.name,
-        phone=lead.phone,
-        email=lead.email,
-        company=lead.source
-    )
+    # Already converted lead
+    if lead.customer:
+        return redirect(
+            'customer_detail',
+            pk=lead.customer.id
+        )
 
-    lead.delete()
-    return redirect('leads')
+    if request.method == 'POST':
+
+        # Create new customer from lead
+        customer = Customer.objects.create(
+            name=lead.name,
+            phone=lead.phone,
+            email=lead.email,
+        )
+
+        # Link lead with customer
+        lead.customer = customer
+
+        # Mark lead as won
+        lead.status = 'won'
+
+        lead.save()
+
+        return redirect(
+            'customer_detail',
+            pk=customer.id
+        )
+
+    return render(
+        request,
+        'crm/convert_lead.html',
+        {
+            'lead': lead,
+        }
+    )
 
 
 @login_required
@@ -366,3 +395,105 @@ def leads(request):
         'search': search,
         'status': status,
     })
+
+@login_required
+@user_passes_test(is_admin_or_sales)
+def activities(request):
+
+    if is_admin(request.user):
+        activity_list = Activity.objects.select_related(
+            'lead',
+            'customer',
+            'assigned_to',
+            'created_by'
+        ).order_by('-due_date', '-created_at')
+
+    else:
+        activity_list = Activity.objects.filter(
+            assigned_to=request.user
+        ).select_related(
+            'lead',
+            'customer',
+            'assigned_to',
+            'created_by'
+        ).order_by('-due_date', '-created_at')
+
+    return render(
+        request,
+        'crm/activities.html',
+        {
+            'activities': activity_list,
+        }
+    )
+
+@login_required
+@user_passes_test(is_admin_or_sales)
+def add_activity(request):
+
+    lead_id = request.GET.get('lead')
+    customer_id = request.GET.get('customer')
+
+    initial = {}
+
+    if lead_id:
+        lead = get_object_or_404(
+            Lead,
+            id=lead_id
+        )
+        initial['lead'] = lead
+
+    if customer_id:
+        customer = get_object_or_404(
+            Customer,
+            id=customer_id
+        )
+        initial['customer'] = customer
+
+    if request.method == 'POST':
+
+        form = ActivityForm(request.POST)
+
+        if form.is_valid():
+
+            activity = form.save(commit=False)
+
+            if not is_admin(request.user):
+                activity.assigned_to = request.user
+
+            activity.created_by = request.user
+
+            activity.save()
+
+            return redirect('activities')
+
+    else:
+        form = ActivityForm(
+            initial=initial
+        )
+
+    return render(
+        request,
+        'crm/add_activity.html',
+        {
+            'form': form,
+        }
+    )
+
+@login_required
+@user_passes_test(is_admin_or_sales)
+def complete_activity(request, activity_id):
+
+    activity = get_object_or_404(
+        Activity,
+        id=activity_id
+    )
+
+    if not is_admin(request.user):
+        if activity.assigned_to != request.user:
+            return redirect('activities')
+
+    activity.status = 'completed'
+    activity.completed_at = timezone.now()
+    activity.save()
+
+    return redirect('activities')

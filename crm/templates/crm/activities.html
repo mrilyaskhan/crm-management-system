@@ -1,0 +1,290 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="ksa-activities-page">
+
+    <!-- Page Header -->
+    <div class="ksa-activities-header">
+
+        <div class="ksa-activities-title">
+
+            <h2>
+                <i class="fa fa-calendar-check"></i>
+                Activities & Follow-ups
+            </h2>
+
+            <p>
+                Manage calls, meetings, follow-ups and customer activities.
+            </p>
+
+        </div>
+
+        <a
+            href="{% url 'add_activity' %}"
+            class="ksa-activities-add-btn"
+        >
+            <i class="fa fa-plus"></i>
+            Add Activity
+        </a>
+
+    </div>
+
+
+    <!-- Activities Card -->
+    <div class="ksa-activities-card">
+
+        <div class="ksa-activities-table-wrapper">
+
+            <table class="ksa-activities-table">
+
+                <thead>
+                    <tr>
+                        <th>Activity</th>
+                        <th>Type</th>
+                        <th>Related To</th>
+                        <th>Assigned To</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                        <th class="ksa-activities-action-head">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for activity in activities %}
+
+                    <tr>
+
+                        <!-- Activity -->
+                        <td>
+
+                            <div class="ksa-activity-name">
+
+                                <div class="ksa-activity-type-icon">
+
+                                    {% if activity.activity_type == 'call' %}
+                                        <i class="fa fa-phone"></i>
+
+                                    {% elif activity.activity_type == 'meeting' %}
+                                        <i class="fa fa-calendar-days"></i>
+
+                                    {% elif activity.activity_type == 'whatsapp' %}
+                                        <i class="fa-brands fa-whatsapp"></i>
+
+                                    {% elif activity.activity_type == 'email' %}
+                                        <i class="fa fa-envelope"></i>
+
+                                    {% elif activity.activity_type == 'follow_up' %}
+                                        <i class="fa fa-clock"></i>
+
+                                    {% else %}
+                                        <i class="fa fa-note-sticky"></i>
+                                    {% endif %}
+
+                                </div>
+
+                                <div>
+                                    <strong>
+                                        {{ activity.title }}
+                                    </strong>
+
+                                    {% if activity.notes %}
+                                        <small>
+                                            {{ activity.notes|truncatechars:60 }}
+                                        </small>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- Type -->
+                        <td>
+                            <span class="ksa-activity-type-badge">
+                                {{ activity.get_activity_type_display }}
+                            </span>
+                        </td>
+
+
+                        <!-- Related To -->
+                        <td>
+
+                            {% if activity.lead %}
+
+                                <a
+                                    href="{% url 'lead_detail' activity.lead.id %}"
+                                    class="ksa-activity-related-link"
+                                >
+                                    <i class="fa fa-bolt"></i>
+                                    {{ activity.lead.name }}
+                                </a>
+
+                            {% elif activity.customer %}
+
+                                <a
+                                    href="{% url 'customer_detail' activity.customer.id %}"
+                                    class="ksa-activity-related-link"
+                                >
+                                    <i class="fa fa-user"></i>
+                                    {{ activity.customer.name }}
+                                </a>
+
+                            {% else %}
+
+                                <span class="ksa-activity-muted">
+                                    Not linked
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- Assigned To -->
+                        <td>
+
+                            {% if activity.assigned_to %}
+
+                                <span class="ksa-activity-user">
+                                    <i class="fa fa-user"></i>
+                                    {{ activity.assigned_to.username }}
+                                </span>
+
+                            {% else %}
+
+                                <span class="ksa-activity-muted">
+                                    Not assigned
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- Due Date -->
+                        <td>
+
+                            {% if activity.due_date %}
+
+                                <span class="ksa-activity-date">
+                                    <i class="fa fa-clock"></i>
+                                    {{ activity.due_date|date:"d M Y, h:i A" }}
+                                </span>
+
+                            {% else %}
+
+                                <span class="ksa-activity-muted">
+                                    No due date
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- Status -->
+                        <td>
+
+                            {% if activity.status == 'completed' %}
+
+                                <span class="ksa-activity-status completed">
+                                    <i class="fa fa-check-circle"></i>
+                                    Completed
+                                </span>
+
+                            {% else %}
+
+                                <span class="ksa-activity-status pending">
+                                    <i class="fa fa-clock"></i>
+                                    Pending
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- Action -->
+                        <td class="ksa-activities-action-cell">
+
+                            {% if activity.status == 'pending' %}
+
+                                <a
+                                    href="{% url 'complete_activity' activity.id %}"
+                                    class="ksa-activity-complete-btn"
+                                    title="Mark Activity as Complete"
+                                    aria-label="Mark Activity as Complete"
+                                >
+                                    <i class="fa fa-check"></i>
+                                    <span>Complete</span>
+                                </a>
+
+                            {% else %}
+
+                                <span class="ksa-activity-completed-label">
+                                    <i class="fa fa-check"></i>
+                                    Done
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="ksa-activities-empty-cell"
+                        >
+
+                            <div class="ksa-activities-empty">
+
+                                <div class="ksa-activities-empty-icon">
+                                    <i class="fa fa-calendar-xmark"></i>
+                                </div>
+
+                                <h4>
+                                    No activities yet
+                                </h4>
+
+                                <p>
+                                    Create a call, meeting, WhatsApp,
+                                    email or follow-up activity.
+                                </p>
+
+                                <a
+                                    href="{% url 'add_activity' %}"
+                                    class="ksa-activities-empty-btn"
+                                >
+                                    <i class="fa fa-plus"></i>
+                                    Add First Activity
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
